@@ -6,13 +6,8 @@
     <title>Interactive Visualizations of Renewable Energy</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="style3.css">
     <script src="https://kit.fontawesome.com/76c400baa8.js" crossorigin="anonymous"></script>
-
-    <!-- <style>
-        body {
-           background-image: url("/static/images/renewable.jpg");
-        }
-     </style> -->
 </head>
 
 <body>
@@ -23,7 +18,7 @@
             <div class="col-md-12">
                 <nav class="navbar navbar-expand-sm navbar-light bg-light justify-content-between">
                     <a class="navbar-brand h1 goofy_blue" href="/">
-                        <h1>Renewable Energy</h1>
+                        <h1>Clean Energy Production</h1>
                     </a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -75,7 +70,6 @@
                                         Data
                                         <i class="fas fa-database"></i>
                                     </a>
-                                    <!--Button for Webscraping-->
                                 </li>
                             </ul>
                         </div>
@@ -93,66 +87,53 @@
                     <div class="col-md-8">
                         <div class="white" style="padding: 10px">
                             <h2>
-                                Renewable Energy Production in the US
+                              Distribution of Energy in US
                             </h2>
                             <hr>
-
                             <div class="col-lg-12">
                                 <div class="col-lg-3">
-                                    <img class="img-responsive" style="float: left;" src="static/images/sunburst.png" width=200%>
+                                  <div class="col-md-5">
+                                    <div id="sunburst"></div>
+                                  </div>
                                 </div>
-
-                                <p class="normal_text"> The objective of this project was to find particular data on a topic of interest and to use different web development software to create a variety of visualizations/plots/graphs that would in effect tell a story regarding
-                                    the otherwise boring dataset.
-                                    <br>
-                                    <br> We have created a variety of different maps that tell us facts pertaining the to consumption of Renewable Energy Resource consumption in the United States. Seeing that we have become more and more aware of the
-                                    need to care for our environment and the effect of some types of conventional energy sources, such as fossil fuels, have been shown and continuously are being shown to have a negative impact on topics such as Global
-                                    Warming, the slow but very real effect some of these fuels emissions have had on our ozone layer and hence the quality of the air we breathe, we thought it may be interesting to see how such use of cleaner energy resources
-                                    such as Solar Power, Wind Power, and Hydro Power/Hydroelectricity, which happen to the major three and leading sources of RE (Renewable Energy) resources has grown over the past decade or two and how much of these types
-                                    of energy we are using in relation to the less clean energy resources available. Also, the fact the these energy sources are Renewable, meaning we won't run out, this lends itself to an interesting analysis through
-                                    visualizations.
-                                </p>
-
                             </div>
-
-
                         </div>
                     </div>
                     <div class="col-md-4 ml-auto">
-                        <div class="white" style="padding: 10px">
-                            <h3>
-                                Visualizations
-                            </h3>
-                            <hr>
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <a href="/hydro" title="">
-                                        <img class="img-responsive" src="static/images/hydro.png" width="100%">
-                                    </a>
-
-                                </div>
-                                <div class="col-lg-6">
-                                    <a href="/solar" title="">
-                                        <img class="img-responsive" src="static/images/solar.png" width="100%">
-                                    </a>
-                                </div>
+                      <div class="white" style="padding: 10px">
+                        <h2>
+                          Latest Articles
+                        </h2>
+                        <hr>
+                        <div style="border:1px solid black; box-shadow: 0 0 30px #719ECE; text-align: center" >
+                          <div> 
+                            Last Refresh: {{r_last_refresh}}
+                          </div>
+                          <div>
+                            <ul class="webscrape_list">
+                             <li style="list-style-type: none; color: black;">
+                               <a href="{{ renewable_link_0 }}">{{ renewable_title_0 }}</a>
+                              </li>
+                              <li style="list-style-type: none; color: black;">
+                               <a href="{{ renewable_link_1 }}">{{ renewable_title_1 }}</a>
+                              </li>
+                              <li style="list-style-type: none; color: black;">
+                                <a href="{{ renewable_link_2 }}">{{ renewable_title_2 }}</a>
+                              </li>
+                              <li style="list-style-type: none; color: black;"> 
+                               <a href="{{ renewable_link_3 }}">{{ renewable_title_3 }}</a>
+                              </li>
+                            </ul>
+                          </div>
+                        </g>
+                        <div class="col-lg-12">
+                            <div class="col-lg-3">
+                              <div class="col-md-5">
+                                <div id="sunburst"></div>
+                              </div>
                             </div>
-                            <div class="row">
-
-                                <div class="col-lg-6">
-                                    <a href="/wind" title="">
-                                        <img class="img-responsive" style="float: left;" src="static/images/wind.png" width="100%">
-                                    </a>
-                                </div>
-                                <div class="col-lg-6">
-                                    <a href="/heatmap" title="">
-                                        <img class="img-responsive" style="float: left;" src="static/images/heatmap.png" width="100%">
-                                    </a>
-                                </div>
-                            </div>
-
                         </div>
+                    </div>
                     </div>
 
                 </div>
@@ -160,14 +141,18 @@
             </div>
         </div>
     </div>
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">Page created by James Cadigan, Taurean Hutchinson, Brandon McDermott and Sahr Musa 2020</span>
-        </div>
-    </footer>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
+    <script src="../static/js/sunburst.js"></script>
+  </body>
 
 </html>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="../static/js/sunburst.js"></script>
+</body>
+
+</html> -->

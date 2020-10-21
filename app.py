@@ -1,80 +1,98 @@
-# import necessary libraries
-from models import create_classes
 import os
-from flask import (
-    Flask,
-    render_template,
-    jsonify,
-    request,
-    redirect)
+import pandas as pd
+import numpy as np
+import sqlalchemy
+from sqlalchemy.ext.automap import automap_base
+from sqlalchemy.orm import Session
+from sqlalchemy import create_engine
+from flask import Flask, jsonify, render_template
+import sqlalchemy
+from flask import Flask, render_template, redirect
+from flask_pymongo import PyMongo
+import renewable_scrape
+import json
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+#################################################
+# Database Setup
+#################################################
+engine = create_engine("sqlite:///project.sqlite")
+
+
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(engine, reflect=True)
+
+# Save reference to the table
+Dataset = Base.classes.dataset
+
 
 #################################################
 # Flask Setup
 #################################################
 app = Flask(__name__)
 
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+json_url = os.path.join(SITE_ROOT, "templates", "USA.geojson")
+heatmapdata = json.load(open(json_url))
+print(heatmapdata)
+
 #################################################
-# Database Setup
+# Flask Routes
 #################################################
 
-from flask_sqlalchemy import SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "sqlite:///db.sqlite"
 
-# Remove tracking modifications
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-Pet = create_classes(db)
-
-# create route that renders index.html template
-@app.route("/")
-def home():
+@app.route("/") 
+def welcome():
     return render_template("index.html")
 
+@app.route("/scrape")
+def scrape():
+    renewable_scrape.renewable_scrape()
+    return redirect("/sunburst")
 
-# Query the database and send the jsonified results
-@app.route("/send", methods=["GET", "POST"])
-def send():
-    if request.method == "POST":
-        name = request.form["petName"]
-        lat = request.form["petLat"]
-        lon = request.form["petLon"]
+@app.route("/hydro")
+def hydro():
+    """Return dashboard.html."""
+    return render_template("hydro.html")
 
-        pet = Pet(name=name, lat=lat, lon=lon)
-        db.session.add(pet)
-        db.session.commit()
-        return redirect("/", code=302)
-
-    return render_template("form.html")
-
-
-@app.route("/api/pals")
-def pals():
-    results = db.session.query(Pet.name, Pet.lat, Pet.lon).all()
-
-    hover_text = [result[0] for result in results]
-    lat = [result[1] for result in results]
-    lon = [result[2] for result in results]
-
-    pet_data = [{
-        "type": "scattergeo",
-        "locationmode": "USA-states",
-        "lat": lat,
-        "lon": lon,
-        "text": hover_text,
-        "hoverinfo": "text",
-        "marker": {
-            "size": 50,
-            "line": {
-                "color": "rgb(8,8,8)",
-                "width": 1
-            },
-        }
-    }]
-
-    return jsonify(pet_data)
+@app.route("/wind")
+def wind():
+    """Return dashboard.html."""
+    return render_template("wind.html")
 
 
-if __name__ == "__main__":
-    app.run()
+@app.route("/heatmap")
+def heatmap():
+    
+    return render_template("heatmap.html")
+
+@app.route("/solar")
+def solar():
+    """Return dashboard.html."""
+    return render_template("solar.html")
+
+@app.route("/location")
+def location():
+    """Return dashboard.html."""
+    return render_template("location.html")
+
+@app.route("/sunburst")
+def sunburst():
+    data =  json.load(open("my_renewables.json","r")) 
+    return render_template("webscrape_sunburst.html",r_last_refresh=data["last_scrape"],renewable_title_0=data["articles "][0],renewable_link_0=data["links"][0],renewable_title_1=data["articles "][1],renewable_link_1=data["links"][2], renewable_title_2 = data["articles "][2],renewable_link_2=data["links"][4],renewable_title_3=data["articles "][3],renewable_link_3=data["links"][6])
+
+@app.route("/api/heatmap")
+def heatmapgeojson():
+    return jsonify(data = heatmapdata)
+
+
+@app.route("/data")
+def data():
+    """Return dashboard.html."""
+    return render_template("data.html")
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
